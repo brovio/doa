@@ -1,0 +1,7 @@
+/* Homepage Styles */
+
+.home-page {
+  font-family: var(--font-family, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif);
+  color: #333;
+  line-height: 1.6;
+}

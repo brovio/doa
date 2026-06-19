@@ -69,6 +69,11 @@ const starterForm: MemorialForm = {
 export default function App() {
   const [page, setPage] = useState<Page>("home");
   const [form, setForm] = useState<MemorialForm>(starterForm);
+  const [mobileOpen, setMobileOpen] = useState(false);
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "auto" });
+  }, [page]);
 
   const pageTitle = useMemo(() => {
     if (page === "buy") return "Choose a memorial plaque";
@@ -106,12 +111,16 @@ export default function App() {
           </span>
         </button>
 
-        <nav className="nav-links" aria-label="Main navigation">
-          <button className="nav-link" onClick={() => setPage("home")} type="button">How it works</button>
-          <button className="nav-link" onClick={() => setPage("buy")} type="button">The Plate</button>
-          <button className="nav-link" onClick={() => setPage("create")} type="button">Memorials</button>
-          <button className="nav-link" onClick={() => setPage("preview")} type="button">Order</button>
-          <button className="nav-cta" onClick={() => setPage("create")} type="button">Begin</button>
+        <button className="menu-toggle" onClick={() => setMobileOpen((o) => !o)} type="button" aria-expanded={mobileOpen} aria-controls="main-menu" aria-label="Toggle navigation">
+          {mobileOpen ? "Close" : "Menu"}
+        </button>
+
+        <nav className={`nav-links ${mobileOpen ? "open" : ""}`} id="main-menu" aria-label="Main navigation">
+          <button className="nav-link" onClick={() => { setPage("home"); setMobileOpen(false); }} type="button">Home</button>
+          <button className="nav-link" onClick={() => { setPage("buy"); setMobileOpen(false); }} type="button">The Plate</button>
+          <button className="nav-link" onClick={() => { setPage("preview"); setMobileOpen(false); }} type="button">Memorials</button>
+          <button className="nav-link" onClick={() => { setPage("buy"); setMobileOpen(false); }} type="button">Order</button>
+          <button className="nav-cta" onClick={() => { setPage("create"); setMobileOpen(false); }} type="button">Begin</button>
         </nav>
       </header>
 
@@ -122,12 +131,12 @@ export default function App() {
               <div className="hero-copy">
                 <p className="eyebrow">Everstone Memorials</p>
                 <h1 className="headline-xl">A story that outlasts the stone.</h1>
-                <p className="body-lead">
-                  Premium QR plaques for headstones and memorial places, linked to a calm, beautiful online page of photos, memories and messages — easy to share with family anywhere in the world.
+                <p className="body-lead hero-tagline">
+                  A quiet way to keep their story close. A small, weather-ready QR memorial plaque that sits beside the stone and opens a beautiful digital page of photos, memories and messages.
                 </p>
                 <div className="hero-actions">
                   <button className="btn btn-primary" onClick={() => setPage("buy")} type="button">
-                    Order a memorial plaque
+                    Order the plaque
                   </button>
                   <button className="btn btn-secondary" onClick={() => setPage("preview")} type="button">
                     View an example memorial
@@ -136,10 +145,20 @@ export default function App() {
               </div>
 
               <div className="hero-visual">
-                <div className="hero-image-block" aria-label="Memorial plaque in a quiet garden setting" />
+                <div className="hero-image-block" aria-label="Memorial plaque in a quiet garden setting">
+                  <div className="hero-silhouette" aria-hidden="true" />
+                  <div className="hero-plaque">
+                    <span className="plaque-qr">
+                      <span />
+                      <span />
+                      <span />
+                    </span>
+                    <small>Scan to remember</small>
+                  </div>
+                </div>
                 <div className="hero-detail-card">
-                  <p>“Even the smallest plaque can carry a lifetime of stories.”</p>
-                  <small>Quietly designed for families</small>
+                  <p>“From plaque to living memorial — one quiet scan keeps a life within reach.”</p>
+                  <small>Made to sit beside the stone, not replace it</small>
                 </div>
               </div>
             </section>
@@ -152,13 +171,13 @@ export default function App() {
               <div className="grid grid-three">
                 <article className="info-card">
                   <span className="step-number">01</span>
-                  <h3>Choose the plate</h3>
-                  <p className="body-quiet">Select a premium QR memorial plaque designed to sit beside an existing headstone or grave marker.</p>
+                  <h3>Order the plaque</h3>
+                  <p className="body-quiet">Choose a discreet, weather-ready QR memorial plaque made to sit beside an existing headstone or grave marker.</p>
                 </article>
                 <article className="info-card">
                   <span className="step-number">02</span>
-                  <h3>Create the page</h3>
-                  <p className="body-quiet">Add the person’s name, dates, life story, family message, photos and a design theme.</p>
+                  <h3>Personalise the page</h3>
+                  <p className="body-quiet">Add their name, dates, life story, family message, photos and a theme that feels like them.</p>
                 </article>
                 <article className="info-card">
                   <span className="step-number">03</span>
@@ -169,12 +188,12 @@ export default function App() {
             </section>
 
             <section className="dark-section">
-              <div className="split-section">
+              <div className="split-section plate-split">
                 <div className="split-content">
                   <p className="eyebrow">The Plate</p>
-                  <h2 className="headline-md">Made to last, made to be felt.</h2>
+                  <h2 className="headline-md">Made to sit beside the stone, not replace it.</h2>
                   <p className="body-lead">
-                    A discreet, weather-ready plaque that sits beside a headstone or memorial place and opens a richer story online. No batteries, no apps — just a quiet scan.
+                    A discreet, weather-ready QR memorial plaque that opens a richer story online. No batteries, no apps — just a quiet scan that brings their memory closer.
                   </p>
                   <div className="hero-actions">
                     <button className="btn btn-light" onClick={() => setPage("buy")} type="button">
@@ -182,34 +201,49 @@ export default function App() {
                     </button>
                   </div>
                 </div>
-                <div className="split-visual" aria-label="Memorial plaque detail view" />
+                <div className="split-visual plate-visual" aria-label="Memorial plaque detail view">
+                  <div className="plate-mockup">
+                    <span className="plate-frame">
+                      <span className="plate-metal">
+                        <span className="plate-qr dark">
+                          <span />
+                          <span />
+                          <span />
+                          <span />
+                        </span>
+                        <small>everstone.co</small>
+                      </span>
+                    </span>
+                  </div>
+                </div>
               </div>
             </section>
 
-            <section className="split-section">
+            <section className="split-section feature-split">
+              <div className="split-visual archive-visual" aria-label="A collection of remembered moments" />
               <div className="split-content">
                 <p className="eyebrow">Thoughtful by design</p>
-                <h2 className="headline-md">Made for families, not funnels.</h2>
+                <h2 className="headline-md">A calm space for a full life.</h2>
                 <p className="body-lead">
-                  The experience is intentionally quiet, simple and human. No clutter, no aggressive upsells, no false urgency — just a dignified path from a physical place of remembrance to a richer digital tribute.
+                  From plaque to living memorial, the experience is intentionally quiet, simple and human. No clutter, no aggressive upsells, no false urgency — just a dignified path from the stone to a richer digital tribute.
                 </p>
-              </div>
-              <div className="trust-list">
-                <p>✓ Dummy checkout ready for product testing</p>
-                <p>✓ Memorial editor with preview flow</p>
-                <p>✓ Two peaceful public themes</p>
-                <p>✓ Local SEO foundations for Northern Rivers searches</p>
+                <div className="trust-list">
+                  <p>✓ Dummy checkout ready for product testing</p>
+                  <p>✓ Memorial editor with preview flow</p>
+                  <p>✓ Two peaceful public themes</p>
+                  <p>✓ Local SEO foundations for Northern Rivers searches</p>
+                </div>
               </div>
             </section>
 
             <section className="section">
               <div className="section-header section-header-center">
                 <p className="eyebrow">Local service areas</p>
-                <h2 className="headline-lg">Built with Byron Bay, Ballina, Mullumbimby and Northern Rivers intent.</h2>
+                <h2 className="headline-lg">Memorial plaques and digital tributes for Northern Rivers families.</h2>
               </div>
               <div className="grid grid-three">
                 {localAreas.map((area) => (
-                  <article className="info-card" key={area.town}>
+                  <article className="info-card local-card" key={area.town}>
                     <h3>{area.town}</h3>
                     <p className="body-quiet">{area.copy}</p>
                     <small>{area.terms}</small>
@@ -239,65 +273,75 @@ export default function App() {
 
         {page === "buy" && (
           <section className="dark-section">
-          <div className="section narrow">
-            <p className="eyebrow">Step 1 of 2 — Dummy checkout</p>
-            <h1 className="headline-lg">Choose your memorial plaque.</h1>
-            <p className="body-lead">
-              Select the plaque you would like. This demo checkout lets you test the journey — no real payment will be taken.
-            </p>
+            <div className="section narrow">
+              <div className="journey-steps">
+                <span className="journey-step active">1. Order the plaque</span>
+                <span className="journey-step">2. Personalise the memorial</span>
+                <span className="journey-step">3. Preview and share</span>
+              </div>
+              <p className="eyebrow">Dummy checkout</p>
+              <h1 className="headline-lg">Order the memorial plaque.</h1>
+              <p className="body-lead">
+                This is a demo checkout — no real payment will be taken. After ordering, you can continue to personalise the memorial page.
+              </p>
 
-            <div className="product-options">
-              <article className="product-card selected">
-                <div className="product-header">
-                  <h2>Premium QR Memorial Plaque</h2>
-                  <span className="badge">Selected</span>
+              <div className="product-options">
+                <article className="product-card selected">
+                  <div className="product-header">
+                    <h2>Premium QR Memorial Plaque</h2>
+                    <span className="badge">Selected</span>
+                  </div>
+                  <p>
+                    A tasteful, weather-ready QR memorial plaque concept designed to sit beside a headstone or grave marker and link to a personal memorial page.
+                  </p>
+                  <ul>
+                    <li>Durable QR plaque concept</li>
+                    <li>Personal memorial page included</li>
+                    <li>Two peaceful themes to choose from</li>
+                    <li>Designed for respectful, headstone-adjacent placement</li>
+                  </ul>
+                  <div className="price-row">
+                    <span>Demo price</span>
+                    <strong>$249</strong>
+                  </div>
+                </article>
+              </div>
+
+              <div className="checkout-summary">
+                <h2>Order summary</h2>
+                <div className="summary-line">
+                  <span>Premium QR Memorial Plaque</span>
+                  <span>$249</span>
                 </div>
-                <p>
-                  A tasteful, weather-ready plaque concept designed to sit beside a headstone or grave marker and link to a personal memorial page.
-                </p>
-                <ul>
-                  <li>Durable QR plaque concept</li>
-                  <li>Personal memorial page included</li>
-                  <li>Two peaceful themes to choose from</li>
-                  <li>Designed for respectful, headstone-adjacent placement</li>
-                </ul>
-                <div className="price-row">
-                  <span>Demo price</span>
-                  <strong>$249</strong>
+                <div className="summary-line">
+                  <span>Memorial page setup</span>
+                  <span>Included</span>
                 </div>
-              </article>
+                <div className="summary-line total">
+                  <span>Total (demo)</span>
+                  <span>$249</span>
+                </div>
+                <button className="btn btn-light" onClick={() => setPage("create")} type="button">
+                  Continue to personalise the memorial
+                </button>
+                <p className="disclaimer">No payment will be taken in this demo.</p>
+              </div>
             </div>
-
-            <div className="checkout-summary">
-              <h2>Order summary</h2>
-              <div className="summary-line">
-                <span>Premium QR Memorial Plaque</span>
-                <span>$249</span>
-              </div>
-              <div className="summary-line">
-                <span>Memorial page setup</span>
-                <span>Included</span>
-              </div>
-              <div className="summary-line total">
-                <span>Total (demo)</span>
-                <span>$249</span>
-              </div>
-              <button className="btn btn-light" onClick={() => setPage("create")} type="button">
-                Continue to personalise the memorial
-              </button>
-              <p className="disclaimer">No payment will be taken in this demo.</p>
-          </div>
-          </div>
-        </section>
-      )}
+          </section>
+        )}
 
         {page === "create" && (
           <section className="section editor-layout">
             <div>
-              <p className="eyebrow">Step 2 of 2 — Personalise</p>
+              <div className="journey-steps">
+                <span className="journey-step done">1. Order the plaque</span>
+                <span className="journey-step active">2. Personalise the memorial</span>
+                <span className="journey-step">3. Preview and share</span>
+              </div>
+              <p className="eyebrow">Personalise</p>
               <h1 className="headline-lg">Create the memorial page.</h1>
               <p className="body-lead">
-                Add the details that tell their story. You can keep it simple now and come back to add more memories later.
+                Add the details that tell their story. Keep it simple now — you can return to add more memories later.
               </p>
 
               <form className="editor-form">
@@ -335,7 +379,7 @@ export default function App() {
                 </label>
 
                 <button className="btn btn-primary" onClick={() => setPage("preview")} type="button">
-                  Preview memorial page
+                  Preview the memorial
                 </button>
               </form>
             </div>
@@ -345,7 +389,13 @@ export default function App() {
         )}
 
         {page === "preview" && (
-          <section className="section">
+          <section className="section preview-page">
+            <div className="journey-steps">
+              <span className="journey-step done">1. Order the plaque</span>
+              <span className="journey-step done">2. Personalise the memorial</span>
+              <span className="journey-step active">3. Preview and share</span>
+            </div>
+
             <div className="preview-header">
               <div>
                 <p className="eyebrow">Public memorial preview</p>
@@ -353,7 +403,7 @@ export default function App() {
                 <p className="body-quiet">{form.dates}</p>
               </div>
               <div className="hero-actions">
-                <button className="btn btn-secondary" onClick={() => setPage("create")} type="button">Edit page</button>
+                <button className="btn btn-secondary" onClick={() => setPage("create")} type="button">Continue personalising</button>
                 <button className="btn btn-secondary" onClick={() => setForm({ ...form, theme: form.theme === "classic" ? "garden" : "classic" })} type="button">
                   Switch theme
                 </button>
@@ -366,11 +416,11 @@ export default function App() {
         {page === "local" && (
           <section className="section">
             <div className="section-header">
-              <p className="eyebrow">Local SEO foundations</p>
+              <p className="eyebrow">Local support</p>
               <h1 className="headline-lg">Memorial plaques for Byron Bay, Ballina, Mullumbimby and Northern Rivers.</h1>
             </div>
             <p className="body-lead">
-              These sections are written as useful local landing-page foundations, not duplicated suburb spam.
+              Useful, locally relevant information for families in the Northern Rivers looking for a QR memorial plaque or digital tribute option.
             </p>
 
             <div className="local-pages">
@@ -402,10 +452,10 @@ export default function App() {
             <small>QR memorial plaque MVP. Demo checkout only. Local service-area wording is used until business details are confirmed.</small>
           </div>
           <nav className="footer-links" aria-label="Footer navigation">
-            <button onClick={() => setPage("home")} type="button">How it works</button>
+            <button onClick={() => setPage("home")} type="button">Home</button>
             <button onClick={() => setPage("buy")} type="button">The Plate</button>
-            <button onClick={() => setPage("create")} type="button">Memorials</button>
-            <button onClick={() => setPage("local")} type="button">Local SEO</button>
+            <button onClick={() => setPage("preview")} type="button">Memorials</button>
+            <button onClick={() => setPage("local")} type="button">Local support</button>
             <button onClick={() => setPage("create")} type="button">Begin</button>
           </nav>
         </div>
@@ -415,36 +465,47 @@ export default function App() {
 }
 
 function MemorialPreview({ form, compact = false }: { form: MemorialForm; compact?: boolean }) {
+  const initials = form.name
+    .split(" ")
+    .map((word) => word[0])
+    .filter(Boolean)
+    .slice(0, 2)
+    .join("");
+
   return (
     <article className={`memorial ${form.theme} ${compact ? "compact" : ""}`}>
-      <div className="memorial-hero">
-        <div className="portrait-placeholder" aria-label="Image placeholder">
-          <span>{form.name.slice(0, 1)}</span>
+      <div className="memorial-cover">
+        <div className="cover-radiance" aria-hidden="true" />
+        <div className="memorial-portrait" aria-label="Memorial portrait placeholder">
+          <span className="portrait-initials">{initials || "E"}</span>
         </div>
-        <div>
+        <div className="memorial-title">
           <p className="eyebrow">{form.theme === "classic" ? "Classic Stone" : "Coastal Garden"}</p>
           <h2>{form.name}</h2>
-          <p>{form.dates}</p>
+          <p className="memorial-dates">{form.dates}</p>
         </div>
       </div>
 
-      <blockquote>{form.intro}</blockquote>
+      <div className="memorial-body">
+        <blockquote className="memorial-quote">{form.intro}</blockquote>
 
-      <div className="memorial-content">
-        <section>
-          <h3>Life story</h3>
-          <p>{form.story}</p>
-        </section>
-        <section>
-          <h3>From the family</h3>
-          <p>{form.familyMessage}</p>
-        </section>
-      </div>
+        <div className="memorial-content">
+          <section>
+            <h3>Life story</h3>
+            <p>{form.story}</p>
+          </section>
+          <section>
+            <h3>From the family</h3>
+            <p>{form.familyMessage}</p>
+          </section>
+        </div>
 
-      <div className="gallery-row" aria-label="Image placeholders">
-        <span />
-        <span />
-        <span />
+        <div className="gallery-row" aria-label="Image placeholders">
+          <span />
+          <span />
+          <span />
+          <span />
+        </div>
       </div>
     </article>
   );

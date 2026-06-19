@@ -1,13 +1,405 @@
-import React from 'react';
-import './styles/globals.css';
-import HomePage from './HomePage';
+﻿import { useEffect, useMemo, useState } from "react";
 
-function App() {
+type Page = "home" | "buy" | "create" | "preview" | "local";
+type Theme = "classic" | "garden";
+
+type MemorialForm = {
+  name: string;
+  dates: string;
+  intro: string;
+  story: string;
+  familyMessage: string;
+  theme: Theme;
+};
+
+const localAreas = [
+  {
+    town: "Byron Bay",
+    title: "QR memorial plaques and headstone links for Byron Bay families",
+    terms: "headstone Byron Bay, memorial plaque Byron Bay, QR memorial plaque Byron Bay",
+    copy:
+      "For Byron Bay families, a QR memorial plaque can sit beside an existing headstone QR memorial marker and gently open a richer story online — photos, memories, family messages and a page that can keep growing over time.",
+  },
+  {
+    town: "Ballina NSW",
+    title: "Digital memorial pages and grave plaques for Ballina NSW",
+    terms: "headstone Ballina, memorial plaque Ballina, digital memorial page Ballina",
+    copy:
+      "Families in Ballina can use a durable QR plaque to connect a physical memorial place with a calm digital tribute, helping relatives and friends revisit the life story behind the name.",
+  },
+  {
+    town: "Mullumbimby",
+    title: "Memorial plaque support for Mullumbimby and nearby communities",
+    terms: "headstone Mullumbimby, memorial plaque Mullumbimby, Northern Rivers memorial plaques",
+    copy:
+      "For Mullumbimby and the wider Northern Rivers, the service is designed for families who want something simple, respectful and lasting — a physical QR plaque linked to a warm online memorial.",
+  },
+];
+
+const faqs = [
+  {
+    q: "Is this a replacement for a headstone?",
+    a: "No. It is designed to sit alongside an existing headstone, grave marker, plaque QR memorial place, giving family and friends a richer story to visit online.",
+  },
+  {
+    q: "Is the checkout real?",
+    a: "Not yet. This MVP uses a dummy checkout so the product journey can be tested before real payments are connected.",
+  },
+  {
+    q: "Can the memorial page be edited later?",
+    a: "The intended product flow allows families to update the page over time. In this demo, the editor uses local preview state only.",
+  },
+  {
+    q: "What can be included on a memorial page?",
+    a: "A short introduction, life story, important dates, family messages, images and a chosen visual theme.",
+  },
+];
+
+const starterForm: MemorialForm = {
+  name: "Eleanor Grace Murphy",
+  dates: "1948 – 2024",
+  intro: "A kind mother, grandmother, neighbour and friend whose warmth shaped every room she entered.",
+  story:
+    "Eleanor built a life around family, music, coastal walks and the quiet rituals that made people feel cared for. Her home was a place of tea, stories and gentle humour.",
+  familyMessage:
+    "We miss you every day. Thank you for the patience, courage and love you gave so freely.",
+  theme: "classic",
+};
+
+export default function App() {
+  const [page, setPage] = useState<Page>("home");
+  const [form, setForm] = useState<MemorialForm>(starterForm);
+
+  const pageTitle = useMemo(() => {
+    if (page === "buy") return "Buy a QR memorial plaque";
+    if (page === "create") return "Create a memorial page";
+    if (page === "preview") return `${form.name} memorial page`;
+    if (page === "local") return "Memorial plaques in Byron Bay, Ballina and Northern Rivers";
+    return "QR memorial plaques for richer life stories";
+  }, [page, form.name]);
+
+  useEffect(() => {
+    document.title = `${pageTitle} | Memorial Plaques`;
+    const description =
+      "Premium QR-coded memorial plaques linking headstones and grave markers to beautiful online memorial pages for families.";
+    let meta = document.querySelector('meta[name="description"]');
+    if (!meta) {
+      meta = document.createElement("meta");
+      meta.setAttribute("name", "description");
+      document.head.appendChild(meta);
+    }
+    meta.setAttribute("content", description);
+  }, [pageTitle]);
+
+  const update = (field: keyof MemorialForm, value: string) => {
+    setForm((current) => ({ ...current, [field]: value }));
+  };
+
   return (
-    <div className="app">
-      <HomePage />
+    <div className="site-shell">
+      <header className="nav">
+        <button className="brand" onClick={() => setPage("home")} type="button">
+          <span className="brand-mark">◼</span>
+          <span>
+            <strong>Everstone</strong>
+            <small>QR memorial plaques</small>
+          </span>
+        </button>
+
+        <nav aria-label="Main navigation">
+          <button onClick={() => setPage("home")} type="button">Home</button>
+          <button onClick={() => setPage("buy")} type="button">Buy</button>
+          <button onClick={() => setPage("create")} type="button">Create</button>
+          <button onClick={() => setPage("preview")} type="button">Preview</button>
+          <button onClick={() => setPage("local")} type="button">Local SEO</button>
+        </nav>
+      </header>
+
+      <main>
+        {page === "home" && (
+          <>
+            <section className="hero">
+              <div className="hero-copy">
+                <p className="eyebrow">For the story beyond the name</p>
+                <h1>Beautiful QR memorial plaques linked to lasting online tributes.</h1>
+                <p className="lead">
+                  A calm, respectful way for families to connect a headstone, grave marker QR memorial plaque
+                  with photos, memories, stories and messages that can be visited by loved ones anywhere.
+                </p>
+                <div className="hero-actions">
+                  <button className="primary" onClick={() => setPage("buy")} type="button">
+                    Buy / Create a Memorial
+                  </button>
+                  <button className="secondary" onClick={() => setPage("preview")} type="button">
+                    View example memorial
+                  </button>
+                </div>
+              </div>
+
+              <div className="plaque-card" aria-label="QR plaque preview">
+                <div className="stone-preview">
+                  <div className="qr-grid" aria-hidden="true">
+                    {Array.from({ length: 25 }).map((_, index) => (
+                      <span key={index} className={index % 3 === 0 || index % 7 === 0 ? "dark" : ""} />
+                    ))}
+                  </div>
+                  <p>Scan to remember</p>
+                  <strong>Eleanor Grace Murphy</strong>
+                </div>
+              </div>
+            </section>
+
+            <section className="section">
+              <p className="eyebrow">How it works</p>
+              <h2>From plaque to living tribute in three simple steps.</h2>
+              <div className="grid three">
+                <article className="info-card">
+                  <span>01</span>
+                  <h3>Choose the plaque</h3>
+                  <p>Select a premium QR memorial plaque suitable for placing beside an existing headstone QR memorial marker.</p>
+                </article>
+                <article className="info-card">
+                  <span>02</span>
+                  <h3>Create the page</h3>
+                  <p>Add the person’s name, dates, life story, family message, photos and a design theme.</p>
+                </article>
+                <article className="info-card">
+                  <span>03</span>
+                  <h3>Share their story</h3>
+                  <p>Visitors scan the QR code and open a beautiful memorial page that tells more than stone alone can hold.</p>
+                </article>
+              </div>
+            </section>
+
+            <section className="split">
+              <div>
+                <p className="eyebrow">Thoughtful by design</p>
+                <h2>Made for families, not funnels.</h2>
+                <p>
+                  The experience is intentionally quiet, simple and human. No clutter, no aggressive upsells,
+                  no false urgency — just a dignified path from a physical place of remembrance to a richer digital tribute.
+                </p>
+              </div>
+              <div className="trust-list">
+                <p>✓ Dummy checkout ready for product testing</p>
+                <p>✓ Memorial editor with preview flow</p>
+                <p>✓ Two public memorial themes</p>
+                <p>✓ Local SEO foundations for Northern Rivers searches</p>
+              </div>
+            </section>
+
+            <section className="section">
+              <p className="eyebrow">Local service areas</p>
+              <h2>Built with Byron Bay, Ballina, Mullumbimby and Northern Rivers intent.</h2>
+              <div className="grid three">
+                {localAreas.map((area) => (
+                  <article className="info-card" key={area.town}>
+                    <h3>{area.town}</h3>
+                    <p>{area.copy}</p>
+                    <small>{area.terms}</small>
+                  </article>
+                ))}
+              </div>
+            </section>
+
+            <FaqSection />
+          </>
+        )}
+
+        {page === "buy" && (
+          <section className="section narrow">
+            <p className="eyebrow">Dummy purchase flow</p>
+            <h1>Choose your QR memorial plaque.</h1>
+            <p className="lead">
+              This demo checkout is here to test the customer journey. Real payment processing has not been connected.
+            </p>
+
+            <div className="product-card">
+              <div>
+                <h2>Premium QR Memorial Plaque</h2>
+                <p>
+                  A tasteful plaque concept designed to link an existing memorial place to a private setup flow
+                  and public memorial page.
+                </p>
+                <ul>
+                  <li>Durable QR plaque concept</li>
+                  <li>Memorial page setup included</li>
+                  <li>Theme selection and preview</li>
+                  <li>Designed for headstone-adjacent placement</li>
+                </ul>
+              </div>
+              <div className="price-box">
+                <span>Demo price</span>
+                <strong>$249</strong>
+                <button className="primary" onClick={() => setPage("create")} type="button">
+                  Continue to Memorial Setup
+                </button>
+                <small>No payment will be taken.</small>
+              </div>
+            </div>
+          </section>
+        )}
+
+        {page === "create" && (
+          <section className="section editor-layout">
+            <div>
+              <p className="eyebrow">Memorial setup</p>
+              <h1>Create the memorial page.</h1>
+              <p className="lead">
+                Keep it simple to start. Families can add the essentials first, then return later to refine the story.
+              </p>
+
+              <form className="editor-form">
+                <label>
+                  Deceased person’s name
+                  <input value={form.name} onChange={(event) => update("name", event.target.value)} />
+                </label>
+
+                <label>
+                  Dates
+                  <input value={form.dates} onChange={(event) => update("dates", event.target.value)} />
+                </label>
+
+                <label>
+                  Short introduction
+                  <textarea value={form.intro} onChange={(event) => update("intro", event.target.value)} />
+                </label>
+
+                <label>
+                  Life story
+                  <textarea value={form.story} onChange={(event) => update("story", event.target.value)} />
+                </label>
+
+                <label>
+                  Family message
+                  <textarea value={form.familyMessage} onChange={(event) => update("familyMessage", event.target.value)} />
+                </label>
+
+                <label>
+                  Memorial theme
+                  <select value={form.theme} onChange={(event) => update("theme", event.target.value as Theme)}>
+                    <option value="classic">Classic Stone</option>
+                    <option value="garden">Coastal Garden</option>
+                  </select>
+                </label>
+
+                <button className="primary" onClick={() => setPage("preview")} type="button">
+                  Preview Memorial Page
+                </button>
+              </form>
+            </div>
+
+            <MemorialPreview form={form} compact />
+          </section>
+        )}
+
+        {page === "preview" && (
+          <section className="section">
+            <div className="preview-header">
+              <div>
+                <p className="eyebrow">Public memorial preview</p>
+                <h1>{form.name}</h1>
+                <p>{form.dates}</p>
+              </div>
+              <div className="hero-actions">
+                <button className="secondary" onClick={() => setPage("create")} type="button">Edit page</button>
+                <button className="secondary" onClick={() => setForm({ ...form, theme: form.theme === "classic" ? "garden" : "classic" })} type="button">
+                  Switch theme
+                </button>
+              </div>
+            </div>
+            <MemorialPreview form={form} />
+          </section>
+        )}
+
+        {page === "local" && (
+          <section className="section">
+            <p className="eyebrow">Local SEO foundations</p>
+            <h1>Memorial plaques for Byron Bay, Ballina, Mullumbimby and Northern Rivers.</h1>
+            <p className="lead">
+              These sections are written as useful local landing-page foundations, not duplicated suburb spam.
+            </p>
+
+            <div className="local-pages">
+              {localAreas.map((area) => (
+                <article className="local-page" key={area.town}>
+                  <h2>{area.title}</h2>
+                  <p>{area.copy}</p>
+                  <h3>Helpful for families searching for:</h3>
+                  <p>{area.terms}</p>
+                  <h3>Common questions</h3>
+                  <p>
+                    Can a QR plaque be used with an existing grave marker? Yes — the intent is to complement
+                    the physical memorial, not replace it. Can the page be updated? The product is designed for
+                    ongoing memories and family additions over time.
+                  </p>
+                </article>
+              ))}
+            </div>
+
+            <FaqSection />
+          </section>
+        )}
+      </main>
+
+      <footer className="footer">
+        <strong>Everstone</strong>
+        <p>QR memorial plaque MVP. Demo checkout only. Service-area wording used until business details are confirmed.</p>
+      </footer>
     </div>
   );
 }
 
-export default App;
+function MemorialPreview({ form, compact = false }: { form: MemorialForm; compact?: boolean }) {
+  return (
+    <article className={`memorial ${form.theme} ${compact ? "compact" : ""}`}>
+      <div className="memorial-hero">
+        <div className="portrait-placeholder" aria-label="Image placeholder">
+          <span>{form.name.slice(0, 1)}</span>
+        </div>
+        <div>
+          <p className="eyebrow">{form.theme === "classic" ? "Classic Stone" : "Coastal Garden"}</p>
+          <h2>{form.name}</h2>
+          <p>{form.dates}</p>
+        </div>
+      </div>
+
+      <blockquote>{form.intro}</blockquote>
+
+      <div className="memorial-content">
+        <section>
+          <h3>Life story</h3>
+          <p>{form.story}</p>
+        </section>
+        <section>
+          <h3>From the family</h3>
+          <p>{form.familyMessage}</p>
+        </section>
+      </div>
+
+      <div className="gallery-row" aria-label="Image placeholders">
+        <span />
+        <span />
+        <span />
+      </div>
+    </article>
+  );
+}
+
+function FaqSection() {
+  return (
+    <section className="section">
+      <p className="eyebrow">Questions families may ask</p>
+      <h2>Simple answers, calmly explained.</h2>
+      <div className="faq-list">
+        {faqs.map((item) => (
+          <details key={item.q}>
+            <summary>{item.q}</summary>
+            <p>{item.a}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+  );
+}
+

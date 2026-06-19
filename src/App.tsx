@@ -18,7 +18,7 @@ const localAreas = [
     title: "QR memorial plaques and headstone links for Byron Bay families",
     terms: "headstone Byron Bay, memorial plaque Byron Bay, QR memorial plaque Byron Bay",
     copy:
-      "For Byron Bay families, a QR memorial plaque can sit beside an existing headstone QR memorial marker and gently open a richer story online — photos, memories, family messages and a page that can keep growing over time.",
+      "For Byron Bay families, a QR memorial plaque can sit beside an existing headstone or grave marker and gently open a richer story online — photos, memories, family messages and a page that can keep growing over time.",
   },
   {
     town: "Ballina NSW",
@@ -39,7 +39,7 @@ const localAreas = [
 const faqs = [
   {
     q: "Is this a replacement for a headstone?",
-    a: "No. It is designed to sit alongside an existing headstone, grave marker, plaque QR memorial place, giving family and friends a richer story to visit online.",
+    a: "No. It is designed to sit alongside an existing headstone, grave marker or memorial plaque, giving family and friends a richer story to visit online.",
   },
   {
     q: "Is the checkout real?",
@@ -71,15 +71,15 @@ export default function App() {
   const [form, setForm] = useState<MemorialForm>(starterForm);
 
   const pageTitle = useMemo(() => {
-    if (page === "buy") return "Buy a QR memorial plaque";
-    if (page === "create") return "Create a memorial page";
-    if (page === "preview") return `${form.name} memorial page`;
+    if (page === "buy") return "Choose a memorial plaque";
+    if (page === "create") return "Personalise the memorial page";
+    if (page === "preview") return `${form.name} — memorial preview`;
     if (page === "local") return "Memorial plaques in Byron Bay, Ballina and Northern Rivers";
-    return "QR memorial plaques for richer life stories";
+    return "Everstone — QR memorial plaques for richer life stories";
   }, [page, form.name]);
 
   useEffect(() => {
-    document.title = `${pageTitle} | Memorial Plaques`;
+    document.title = pageTitle;
     const description =
       "Premium QR-coded memorial plaques linking headstones and grave markers to beautiful online memorial pages for families.";
     let meta = document.querySelector('meta[name="description"]');
@@ -121,17 +121,16 @@ export default function App() {
             <section className="hero">
               <div className="hero-copy">
                 <p className="eyebrow">For the story beyond the name</p>
-                <h1>Beautiful QR memorial plaques linked to lasting online tributes.</h1>
+                <h1>A gentle way to keep their story alive.</h1>
                 <p className="lead">
-                  A calm, respectful way for families to connect a headstone, grave marker QR memorial plaque
-                  with photos, memories, stories and messages that can be visited by loved ones anywhere.
+                  Premium QR plaques for headstones and memorial places, linked to a calm, beautiful online page of photos, memories and messages — easy to share with family anywhere in the world.
                 </p>
                 <div className="hero-actions">
                   <button className="primary" onClick={() => setPage("buy")} type="button">
-                    Buy / Create a Memorial
+                    Order a memorial plaque
                   </button>
                   <button className="secondary" onClick={() => setPage("preview")} type="button">
-                    View example memorial
+                    View an example memorial
                   </button>
                 </div>
               </div>
@@ -156,7 +155,7 @@ export default function App() {
                 <article className="info-card">
                   <span>01</span>
                   <h3>Choose the plaque</h3>
-                  <p>Select a premium QR memorial plaque suitable for placing beside an existing headstone QR memorial marker.</p>
+                  <p>Select a premium QR memorial plaque designed to sit beside an existing headstone or grave marker.</p>
                 </article>
                 <article className="info-card">
                   <span>02</span>
@@ -208,34 +207,52 @@ export default function App() {
 
         {page === "buy" && (
           <section className="section narrow">
-            <p className="eyebrow">Dummy purchase flow</p>
-            <h1>Choose your QR memorial plaque.</h1>
+            <p className="eyebrow">Step 1 of 2 — Dummy checkout</p>
+            <h1>Choose your memorial plaque.</h1>
             <p className="lead">
-              This demo checkout is here to test the customer journey. Real payment processing has not been connected.
+              Select the plaque you would like. This demo checkout lets you test the journey — no real payment will be taken.
             </p>
 
-            <div className="product-card">
-              <div>
-                <h2>Premium QR Memorial Plaque</h2>
+            <div className="product-options">
+              <article className="product-card selected">
+                <div className="product-header">
+                  <h2>Premium QR Memorial Plaque</h2>
+                  <span className="badge">Selected</span>
+                </div>
                 <p>
-                  A tasteful plaque concept designed to link an existing memorial place to a private setup flow
-                  and public memorial page.
+                  A tasteful, weather-ready plaque concept designed to sit beside a headstone or grave marker and link to a personal memorial page.
                 </p>
                 <ul>
                   <li>Durable QR plaque concept</li>
-                  <li>Memorial page setup included</li>
-                  <li>Theme selection and preview</li>
-                  <li>Designed for headstone-adjacent placement</li>
+                  <li>Personal memorial page included</li>
+                  <li>Two peaceful themes to choose from</li>
+                  <li>Designed for respectful, headstone-adjacent placement</li>
                 </ul>
+                <div className="price-row">
+                  <span>Demo price</span>
+                  <strong>$249</strong>
+                </div>
+              </article>
+            </div>
+
+            <div className="checkout-summary">
+              <h2>Order summary</h2>
+              <div className="summary-line">
+                <span>Premium QR Memorial Plaque</span>
+                <span>$249</span>
               </div>
-              <div className="price-box">
-                <span>Demo price</span>
-                <strong>$249</strong>
-                <button className="primary" onClick={() => setPage("create")} type="button">
-                  Continue to Memorial Setup
-                </button>
-                <small>No payment will be taken.</small>
+              <div className="summary-line">
+                <span>Memorial page setup</span>
+                <span>Included</span>
               </div>
+              <div className="summary-line total">
+                <span>Total (demo)</span>
+                <span>$249</span>
+              </div>
+              <button className="primary" onClick={() => setPage("create")} type="button">
+                Continue to personalise the memorial
+              </button>
+              <p className="disclaimer">No payment will be taken in this demo.</p>
             </div>
           </section>
         )}
@@ -243,36 +260,36 @@ export default function App() {
         {page === "create" && (
           <section className="section editor-layout">
             <div>
-              <p className="eyebrow">Memorial setup</p>
+              <p className="eyebrow">Step 2 of 2 — Personalise</p>
               <h1>Create the memorial page.</h1>
               <p className="lead">
-                Keep it simple to start. Families can add the essentials first, then return later to refine the story.
+                Add the details that tell their story. You can keep it simple now and come back to add more memories later.
               </p>
 
               <form className="editor-form">
                 <label>
-                  Deceased person’s name
-                  <input value={form.name} onChange={(event) => update("name", event.target.value)} />
+                  Name
+                  <input value={form.name} onChange={(event) => update("name", event.target.value)} placeholder="e.g. Eleanor Grace Murphy" />
                 </label>
 
                 <label>
                   Dates
-                  <input value={form.dates} onChange={(event) => update("dates", event.target.value)} />
+                  <input value={form.dates} onChange={(event) => update("dates", event.target.value)} placeholder="e.g. 1948 – 2024" />
                 </label>
 
                 <label>
                   Short introduction
-                  <textarea value={form.intro} onChange={(event) => update("intro", event.target.value)} />
+                  <textarea value={form.intro} onChange={(event) => update("intro", event.target.value)} placeholder="A sentence or two that captures their spirit." />
                 </label>
 
                 <label>
                   Life story
-                  <textarea value={form.story} onChange={(event) => update("story", event.target.value)} />
+                  <textarea value={form.story} onChange={(event) => update("story", event.target.value)} placeholder="Share the memories, places and moments that shaped their life." />
                 </label>
 
                 <label>
                   Family message
-                  <textarea value={form.familyMessage} onChange={(event) => update("familyMessage", event.target.value)} />
+                  <textarea value={form.familyMessage} onChange={(event) => update("familyMessage", event.target.value)} placeholder="A message from those who loved them." />
                 </label>
 
                 <label>
@@ -284,7 +301,7 @@ export default function App() {
                 </label>
 
                 <button className="primary" onClick={() => setPage("preview")} type="button">
-                  Preview Memorial Page
+                  Preview memorial page
                 </button>
               </form>
             </div>
@@ -344,7 +361,7 @@ export default function App() {
 
       <footer className="footer">
         <strong>Everstone</strong>
-        <p>QR memorial plaque MVP. Demo checkout only. Service-area wording used until business details are confirmed.</p>
+        <p>QR memorial plaque MVP. Demo checkout only. Local service-area wording is used until business details are confirmed.</p>
       </footer>
     </div>
   );

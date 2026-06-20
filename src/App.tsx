@@ -200,7 +200,7 @@ function App(): JSX.Element {
 
   useEffect(() => {
     try {
-      const raw = window.localStorage.getItem("everstone-draft");
+      const raw = window.localStorage.getItem("everstone-life-memorial-draft-v1");
       if (raw) {
         const parsed = JSON.parse(raw) as Partial<DraftData>;
         if (parsed.stewardEmail || parsed.memorialDetails?.fullName) {
@@ -214,7 +214,7 @@ function App(): JSX.Element {
 
   const persist = (data: DraftData) => {
     try {
-      window.localStorage.setItem("everstone-draft", JSON.stringify(data));
+      window.localStorage.setItem("everstone-life-memorial-draft-v1", JSON.stringify(data));
     } catch {
       // ignore
     }
@@ -245,7 +245,7 @@ function App(): JSX.Element {
 
   const resumeDraft = () => {
     try {
-      const raw = window.localStorage.getItem("everstone-draft");
+      const raw = window.localStorage.getItem("everstone-life-memorial-draft-v1");
       if (!raw) return;
       const parsed = JSON.parse(raw) as Partial<DraftData>;
       if (parsed.stewardEmail !== undefined) setStewardEmail(parsed.stewardEmail);
@@ -264,7 +264,7 @@ function App(): JSX.Element {
   };
 
   const startAgain = () => {
-    window.localStorage.removeItem("everstone-draft");
+    window.localStorage.removeItem("everstone-life-memorial-draft-v1");
     setStewardEmail("");
     setMemorialDetails(emptyDetails);
     setStoryFields(emptyStory);

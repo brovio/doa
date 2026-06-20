@@ -1,6 +1,61 @@
 # Last agent handoff
 
 ## Task
+Fix local draft save/resume for the guided memorial wizard.
+
+## Changed files
+- src/App.tsx
+
+## Changes made
+- Updated localStorage key from "everstone-draft" to "everstone-life-memorial-draft-v1"
+- Modified draft save/resume logic to use the correct storage key
+- Updated startAgain function to clear the correct localStorage key
+- Preserved existing draft detection and resume functionality
+
+## localStorage key used
+- everstone-life-memorial-draft-v1
+
+## Save behaviour
+- "Save draft locally" button persists current wizard data to localStorage with key "everstone-life-memorial-draft-v1"
+- Draft includes: stewardEmail, memorialDetails, storyFields, timeline, theme, selectedAssets, uploadedImagePlaceholders, memorialOptions, draftStatus
+- Clear "Draft saved" feedback is shown after saving
+
+## Resume behaviour
+- Refreshing the app detects saved draft using the storage key
+- If a saved draft exists, "Resume draft" button is shown on step 1
+- Resume Draft restores all saved wizard data including current step
+
+## Start Again behaviour
+- "Start Again" button clears the saved localStorage draft
+- Resets all wizard data to initial state
+- Returns user to step 1 with clean form
+
+## Build result
+- npm run build succeeded:
+  - dist/index.html 0.48 kB
+  - dist/assets/index-c95a27d7.css 30.01 kB (gzip 6.27 kB)
+  - dist/assets/index-afb56c0c.js 178.08 kB (gzip 54.68 kB)
+- No TypeScript or build errors.
+
+## Manual test steps
+1. Start creating a memorial on step 1
+2. Enter email and name, click "Save starter draft"
+3. Verify "Draft saved" feedback appears
+4. Refresh the browser - draft should be detected
+5. Click "Resume draft" - form should restore saved data
+6. Navigate to later steps and save draft again
+7. Refresh and resume - should restore correct step and data
+8. Click "Start Again" - should clear draft and reset form
+9. Verify localStorage key "everstone-life-memorial-draft-v1" is used throughout
+
+## Remaining manual checks
+- Test draft save/resume across all wizard steps
+- Verify all draft data fields are properly saved and restored
+- Confirm Start Again properly clears all state
+- Check draft detection works on initial page load
+# Last agent handoff
+
+## Task
 Premium memorial-studio enhancement pass for the QR memorial plaque MVP.
 
 ## Changed files
